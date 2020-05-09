@@ -199,7 +199,7 @@ class App extends React.Component {
           <h1>header</h1>
         </header>
         <main className="App-main">
-          <TableRates />
+          <TableRates rates={this.state.rates} />
         </main>
       </div>
     )

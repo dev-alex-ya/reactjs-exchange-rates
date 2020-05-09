@@ -1,11 +1,13 @@
 import React from 'react'
 import classes from './Rate.module.css'
-console.log(classes)
+
 const Rate = props => (
   <tr className={classes.tr}>
-    <td>Австралійський долар</td>
-    <td>17.5212</td>
-    <td>AUD</td>
+
+    <td>{props.name}</td>
+    <td>{props.rate}</td>
+    <td>{props.cc}</td>
+
   </tr>
 )
 
