@@ -1,7 +1,8 @@
 import React from 'react'
 import classes from './TableRates.module.css'
+import Rate from '../Rate/Rate'
 
-const TableRates = (props) => (
+const TableRates = props => (
   <table>
     <caption>Курс валют НБУ:</caption>
     <thead>
@@ -12,11 +13,8 @@ const TableRates = (props) => (
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Австралійський долар</td>
-        <td>17.5212</td>
-        <td>AUD</td>
-      </tr>
+      <Rate />
+      <Rate />
     </tbody>
   </table>
 )

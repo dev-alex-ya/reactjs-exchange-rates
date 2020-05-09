@@ -5,8 +5,19 @@ table {
   border-collapse: collapse;
 }
 
+table caption {
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  font-style: italic;
+  font-weight: bold;
+}
+
 table td,
 table th {
-  border: 1px solid #909090;
-  padding: 5px;
+  padding: 10px;
+}
+
+table th {
+  background-color: #282c34;
+  color: #fff
 }

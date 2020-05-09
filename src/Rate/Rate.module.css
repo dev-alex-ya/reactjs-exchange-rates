@@ -1,0 +1,11 @@
+.tr {
+  border: 1px solid #909090;
+}
+
+.tr:hover {
+  background-color: rgb(235, 255, 248);
+}
+
+.tr td:nth-child(2){
+  color: #e76060;
+}
