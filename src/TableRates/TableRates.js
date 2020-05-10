@@ -5,7 +5,6 @@ import Rate from '../Rate/Rate'
 const TableRates = props => {
   return (
     <table>
-      <caption>Курс валют НБУ:</caption>
       <thead>
         <tr>
           <th>Название</th>

@@ -12,8 +12,37 @@
   color: white;
 }
 
+.App-header h1 {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.App-bar {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #61dafb;
+  display: flex;
+}
+
 .App-link {
+  font-size: 18px;
+  font-weight: bold;
   color: #61dafb;
+  padding: 15px 20px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.App-link:hover {
+  background-color: rgba(255,255,255,.2);
+  text-decoration: underline;
+}
+
+.App-date {
+  margin-top: 20px;
+  font-size: 16px;
+  border: 1px solid #282c34;
+  padding: 5px;
 }
 
 .App-main {
