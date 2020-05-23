@@ -7,6 +7,7 @@ const Rate = props => (
     <td>{props.name}</td>
     <td>{props.rate}</td>
     <td>{props.cc}</td>
+    <td>{props.exchangedate}</td>
 
   </tr>
 )
