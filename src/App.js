@@ -4,6 +4,8 @@ import TableRates from './TableRates/TableRates'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { compareAsc, format } from 'date-fns'
+import {BrowserRouter, NavLink, Route} from "react-router-dom";
+import Charts from "./Charts/Charts";
 
 class App extends React.Component {
 
@@ -68,24 +70,35 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-        <header className="App-header">
-          <div className="container">
-            <h1>RateChecker</h1>
-            <nav className="App-bar">
-              <a className="App-link" href="#">Rates</a>
-              <a className="App-link" href="#">Chart</a>
-            </nav>
-          </div>
-        </header>
-        <main className="App-main container">
-          <DatePicker
-            className="App-date"
-            dateFormat="yyyy/MM/dd"
-            selected={this.state.startDate}
-            onChange={this.handleChangeDate}
-          />
-          {this.content()}
-        </main>
+        <BrowserRouter>
+          <header className="App-header">
+            <div className="container">
+              <h1>RateChecker</h1>
+              <nav className="App-bar">
+                <NavLink className="App-link" to="/">Rates</NavLink>
+                <NavLink className="App-link" to="/charts">Chart</NavLink>
+              </nav>
+            </div>
+          </header>
+          <main className="App-main container">
+            <Route path="/" exact render={()=>{
+              return (
+                <>
+                  <DatePicker
+                      className="App-date"
+                      dateFormat="yyyy/MM/dd"
+                      selected={this.state.startDate}
+                      onChange={this.handleChangeDate}
+                  />
+                  {this.content()}
+                </>
+                )
+            }}/>
+            <Route path="/charts" component={Charts}/>
+
+
+          </main>
+        </BrowserRouter>
       </div>
     )
   }
