@@ -1,20 +1,21 @@
 import React from 'react';
+import {add, changeDate} from './redux/actions/actions';
+import {connect} from 'react-redux'
 import './App.css';
 import TableRates from './TableRates/TableRates'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { compareAsc, format } from 'date-fns'
+import { format } from 'date-fns'
 import {BrowserRouter, NavLink, Route} from "react-router-dom";
-import Charts from "./Charts/Charts";
 
 class App extends React.Component {
 
-  state = {
-    rates: [],
-    startDate: new Date(),
-    error: null,
-    isLoaded: false
-  }
+  // state = {
+  //   rates: [],
+  //   startDate: new Date(),
+  //   error: null,
+  //   isLoaded: false
+  // }
 
   getRates = (date) => {
     
@@ -52,22 +53,23 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-     this.handleChangeDate(this.state.startDate)
+     // this.handleChangeDate(this.state.startDate)
   }
 
-  content = () => {
-    if(this.state.requestError) {
-      return (<h2 style={{color: 'red'}}>Ошибка запроса...</h2>)
-    } else if(!this.state.isLoaded) {
-      return (<h2 style={{color: 'blue'}}>Загрузка...</h2>)
-    } else {
-      return (
-        <TableRates rates={this.state.rates}/>
-      )
-    }
-  }
+  // content = () => {
+  //   if(this.state.requestError) {
+  //     return (<h2 style={{color: 'red'}}>Ошибка запроса...</h2>)
+  //   } else if(!this.state.isLoaded) {
+  //     return (<h2 style={{color: 'blue'}}>Загрузка...</h2>)
+  //   } else {
+  //     return (
+  //       <TableRates rates={this.state.rates}/>
+  //     )
+  //   }
+  // }
   
   render(){
+    console.log('APP', this.props)
     return (
       <div className="App">
         <BrowserRouter>
@@ -81,20 +83,23 @@ class App extends React.Component {
             </div>
           </header>
           <main className="App-main container">
+
+            <DatePicker
+                className="App-date"
+                dateFormat="yyyy/MM/dd"
+                selected={this.props.startDate}
+                onChange={this.props.onChangeDate}
+            />
+            {/*{this.content()}*/}
+
             <Route path="/" exact render={()=>{
               return (
                 <>
-                  <DatePicker
-                      className="App-date"
-                      dateFormat="yyyy/MM/dd"
-                      selected={this.state.startDate}
-                      onChange={this.handleChangeDate}
-                  />
-                  {this.content()}
+
                 </>
                 )
             }}/>
-            <Route path="/charts" component={Charts}/>
+            {/*<Route path="/charts" component={Charts}/>*/}
 
 
           </main>
@@ -105,4 +110,18 @@ class App extends React.Component {
 
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    startDate: state.startDate
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAdd: () => dispatch(add()),
+    onChangeDate: (date) => dispatch(changeDate(date)),
+    // onAsyncAdd: (num) => dispatch(asyncAdd(num))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
