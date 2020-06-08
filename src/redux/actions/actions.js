@@ -1,5 +1,4 @@
-import {ADD, CHANGE_DATE, SET_LOADING, SAVE_RESULT, CHANGE_SELECTED} from './actionsTypes'
-import {format} from "date-fns";
+import {ADD, CHANGE_DATE, SET_LOADING, SAVE_RESULT, CHANGE_SELECTED} from './actionsTypes';
 
 export function add() {
   return {
@@ -35,10 +34,4 @@ export function handleChangeSelected(selectedItems) {
     payload: selectedItems
   }
 
-}
-
-export function asyncChangeDate(date) {
-  return async (dispatch) => {
-    dispatch(changeDate(date))
-  }
 }

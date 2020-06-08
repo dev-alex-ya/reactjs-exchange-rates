@@ -1,5 +1,5 @@
 import React from 'react';
-import {add, changeDate, asyncChangeDate, setIsLoaded, saveResult} from './redux/actions/actions';
+import {changeDate, setIsLoaded, saveResult} from './redux/actions/actions';
 import {connect} from 'react-redux';
 import './App.css';
 import DatePicker from 'react-datepicker';
@@ -122,11 +122,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onAdd: () => dispatch(add()),
     onChangeDate: (date) => dispatch(changeDate(date)),
     setIsLoaded: (isLoaded) => dispatch(setIsLoaded(isLoaded)),
     saveResult: (rates) => dispatch(saveResult(rates))
-    // onChangeDate: (date) => dispatch(asyncChangeDate(date)),
   }
 }
 

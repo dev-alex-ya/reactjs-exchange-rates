@@ -1,16 +1,11 @@
-import React, {Component} from 'react'
-import classes from './Charts.module.css'
+import React from 'react'
+// import classes from './Charts.module.css'
 import { Chart } from 'react-charts'
 import {format} from "date-fns";
 import {connect} from 'react-redux';
-import {add, changeDate, saveResult, setIsLoaded, handleChangeSelected} from '../redux/actions/actions';
+import {saveResult, setIsLoaded, handleChangeSelected} from '../redux/actions/actions';
 
 const Charts = (props) => {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
 
   const handler10days = () => {
     let date = this.props.date;
@@ -24,8 +19,8 @@ const Charts = (props) => {
     // сформировать массив дата для выбранной валюты (выбранной где?)
   }
 
-  const handleChange = () => {
-    console.log('Селект изменился - переделываем график')
+  const handleChangeSelect = (event) => {
+    console.log('handleChangeSelect', event.target.value)
   }
 
   return (
@@ -43,6 +38,15 @@ const Charts = (props) => {
         <button onClick={() => {console.log('За год')}}>За год</button>
       </div>
 
+      {/*<select size="10" multiple name="rates[]" onChange={handleChangeSelect} value={props.selectValues}>*/}
+      {/*  <option value="rate1">1 rate</option>*/}
+      {/*  <option value="rate2">2 rate</option>*/}
+      {/*  <option value="rate3">3 rate</option>*/}
+      {/*  <option value="rate4">1 rate</option>*/}
+      {/*  <option value="rate5">2 rate</option>*/}
+      {/*  <option value="rate6">3 rate</option>*/}
+      {/*</select>*/}
+
       <Chart data={props.data} axes={props.axes} />
     </div>
   )
@@ -50,6 +54,7 @@ const Charts = (props) => {
 
 function mapStateToProps(state) {
   return {
+    // selectValues: state.selectValues,
     date: state.date,
     rates: state.rates,
     isLoaded: state.isLoaded,

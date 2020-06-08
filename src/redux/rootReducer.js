@@ -1,4 +1,4 @@
-import {ADD, CHANGE_DATE, CHANGE_SELECTED, SAVE_RESULT, SET_LOADING} from './actions/actionsTypes';
+import { CHANGE_DATE, CHANGE_SELECTED, SAVE_RESULT, SET_LOADING} from './actions/actionsTypes';
 
 const initialState = {
   isLoaded: false,
