@@ -1,24 +1,26 @@
-import {ADD, CHANGE_DATE} from './actions/actionsTypes'
+import {ADD, CHANGE_DATE, CHANGE_SELECTED, SAVE_RESULT, SET_LOADING} from './actions/actionsTypes';
 
 const initialState = {
-  startDate: new Date(),
-  selectedOption: [],
+  isLoaded: false,
+  date: new Date(),
   selectedRates: [],
-  rates: {}
+  rates: new Map()
 }
 
-export default (state = initialState, action) => {
-
+const rootReducer = (state = initialState, action) => {
+// debugger
   switch (action.type) {
-    case ADD:
-      return {
-        counter: state.counter + 1
-      }
     case CHANGE_DATE:
-      return {
-        startDate: action.payload
-      }
+      return {...state, date: action.payload};
+    case SET_LOADING:
+      return {...state, isLoaded: action.payload};
+    case SAVE_RESULT:
+      return {...state, rates: action.payload};
+    case CHANGE_SELECTED:
+      return {...state, selectedRates: [...state.selectedRates, action.payload]};
     default:
       return state
   }
 }
+
+export default rootReducer

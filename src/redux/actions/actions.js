@@ -1,4 +1,5 @@
-import {ADD, SUB, ADD_NUMBER, ADD2, CHANGE_DATE} from './actionsTypes'
+import {ADD, CHANGE_DATE, SET_LOADING, SAVE_RESULT, CHANGE_SELECTED} from './actionsTypes'
+import {format} from "date-fns";
 
 export function add() {
   return {
@@ -13,10 +14,31 @@ export function changeDate(date) {
   }
 }
 
-// export function asyncAdd(number) {
-//   return (dispatch) => {
-//     setTimeout(() => {
-//       dispatch(addNumber(number))
-//     }, 3000);
-//   }
-// }
+export function setIsLoaded(isLoaded) {
+  return {
+    type: SET_LOADING,
+    payload: isLoaded
+  }
+}
+
+export function saveResult(rates) {
+  return {
+    type: SAVE_RESULT,
+    payload: rates
+  }
+}
+
+export function handleChangeSelected(selectedItems) {
+  // debugger
+  return {
+    type: CHANGE_SELECTED,
+    payload: selectedItems
+  }
+
+}
+
+export function asyncChangeDate(date) {
+  return async (dispatch) => {
+    dispatch(changeDate(date))
+  }
+}
