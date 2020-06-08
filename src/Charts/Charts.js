@@ -2,14 +2,59 @@ import React, {Component} from 'react'
 import classes from './Charts.module.css'
 import { Chart } from 'react-charts'
 import {format} from "date-fns";
-import DatePicker from "react-datepicker";
-import Select from 'react-select';
+import {connect} from 'react-redux';
+import {add, changeDate, saveResult, setIsLoaded, handleChangeSelected} from '../redux/actions/actions';
 
-class Charts extends Component {
+const Charts = (props) => {
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
 
-  state = {
-    rates: this.props.rates,
-    startDate: new Date(),
+  const handler10days = () => {
+    let date = this.props.date;
+    const dayMilliseconds = 24*60*60*1000;
+
+    let dates = [...Array(10).keys()]
+      .map((daysCount) => {
+        return format(date.getTime() - dayMilliseconds * daysCount, 'yyyyMMdd')
+      })
+
+    // сформировать массив дата для выбранной валюты (выбранной где?)
+  }
+
+  const handleChange = () => {
+    console.log('Селект изменился - переделываем график')
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '300px'
+      }}
+    >
+
+      <div>
+        <button onClick={handler10days}>За 10 дней</button>
+        <button onClick={() => {console.log('За месяц')}}>За месяц</button>
+        <button onClick={() => {console.log('За полгода')}}>За полгода</button>
+        <button onClick={() => {console.log('За год')}}>За год</button>
+      </div>
+
+      <Chart data={props.data} axes={props.axes} />
+    </div>
+  )
+}
+
+function mapStateToProps(state) {
+  return {
+    date: state.date,
+    rates: state.rates,
+    isLoaded: state.isLoaded,
+    selectedRates: state.selectedRates,
+
     data: [
       {
         label: 'AUD',
@@ -25,82 +70,14 @@ class Charts extends Component {
       { type: 'linear', position: 'left' }
     ]
   }
-
-  getRate = (valcode, date) => {
-
-// https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=CAD&date=20200523
-// https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=EUR&date=20200523
-    const url = `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=${valcode}&date=${format(date, 'yyyyMMdd')}`
-    fetch(url)
-      .then(res => res.json())
-      .then(
-        (res) => {
-          this.setState({
-            isLoaded: true,
-            rates: res
-          })
-          console.log('res: ', res)
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-          console.log('error: ', error)
-        }
-      )
-  }
-
-  handleChangeDate = date => {
-    this.setState({
-      startDate: date
-    })
-  }
-
-  handler10days = () => {
-    let date = this.state.startDate;
-    const dayMilliseconds = 24*60*60*1000;
-
-    let dates = [...Array(10).keys()]
-      .map((daysCount) => {
-        return format(new Date(date.getTime() - dayMilliseconds * daysCount), 'yyyyMMdd')
-      })
-      .reverse()
-      .map((dateStr) => {
-
-      })
-
-    console.log(dates)
-  }
-
-  render() {
-    return (
-      <div
-        style={{
-          width: '100%',
-          height: '300px'
-        }}
-      >
-
-        <DatePicker
-          className="App-date"
-          dateFormat="yyyy/MM/dd"
-          selected={this.state.startDate}
-          onChange={this.handleChangeDate}
-        />
-        <div>
-          <button onClick={this.handler10days}>За 10 дней</button>
-          <button onClick={() => {console.log('За месяц')}}>За месяц</button>
-          <button onClick={() => {console.log('За полгода')}}>За полгода</button>
-          <button onClick={() => {console.log('За год')}}>За год</button>
-        </div>
-
-
-        <Chart data={this.state.data} axes={this.state.axes} />
-      </div>
-    )
-  }
-
 }
 
-export default Charts
+function mapDispatchToProps(dispatch) {
+  return {
+    setIsLoaded: (isLoaded) => dispatch(setIsLoaded(isLoaded)),
+    saveResult: (rates) => dispatch(saveResult(rates)),
+    handleChangeSelected: (event) => dispatch(handleChangeSelected(event.target.value))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Charts)

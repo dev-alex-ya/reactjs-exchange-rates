@@ -3,6 +3,7 @@ import classes from './TableRates.module.css'
 import Rate from '../Rate/Rate'
 
 const TableRates = props => {
+  // debugger
   return (
     <table>
       <thead>

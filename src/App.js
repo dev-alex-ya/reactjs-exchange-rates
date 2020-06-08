@@ -1,75 +1,75 @@
 import React from 'react';
-import {add, changeDate} from './redux/actions/actions';
-import {connect} from 'react-redux'
+import {add, changeDate, asyncChangeDate, setIsLoaded, saveResult} from './redux/actions/actions';
+import {connect} from 'react-redux';
 import './App.css';
-import TableRates from './TableRates/TableRates'
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import { format } from 'date-fns'
-import {BrowserRouter, NavLink, Route} from "react-router-dom";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import {BrowserRouter, NavLink, Route,} from 'react-router-dom';
+import {format} from "date-fns";
+import TableRates from './TableRates/TableRates';
+import Charts from './Charts/Charts';
 
 class App extends React.Component {
 
-  // state = {
-  //   rates: [],
-  //   startDate: new Date(),
-  //   error: null,
-  //   isLoaded: false
-  // }
+  componentDidMount() {
+    // debugger
+    const formatedDate = format(this.props.date, 'yyyyMMdd');
+    const url = `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&date=${formatedDate}`;
 
-  getRates = (date) => {
-    
-  }
-
-  handleChangeDate = date => {
-    this.setState({
-      startDate: date
-    })
-
-    const url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?'
-    const urlParams = ['json']
-    urlParams.push(`date=${format(date, 'yyyyMMdd')}`)
-    fetch(url + urlParams.join('&'))
+    fetch(url)
       .then(res => res.json())
       .then(
         (res) => {
-          this.setState({
-            isLoaded: true,
-            rates: res
-          })
-          console.log('res: ', res)
+          const rates = new Map([...this.props.rates]);
+          rates.set(formatedDate, res);
+
+          this.props.setIsLoaded(true);//флаг завершения загрузки
+          this.props.saveResult(rates);//созраняем результат
         },
         (error) => {
-          this.setState({
+          this.props.setIsLoaded(true);//флаг завершения загрузки
+          return {
             isLoaded: true,
             error
-          })
-          console.log('error: ', error)
+          }
         }
       )
-
-    
-    // console.log(rates)
-  };
-
-  componentDidMount() {
-     // this.handleChangeDate(this.state.startDate)
   }
 
-  // content = () => {
-  //   if(this.state.requestError) {
-  //     return (<h2 style={{color: 'red'}}>Ошибка запроса...</h2>)
-  //   } else if(!this.state.isLoaded) {
-  //     return (<h2 style={{color: 'blue'}}>Загрузка...</h2>)
-  //   } else {
-  //     return (
-  //       <TableRates rates={this.state.rates}/>
-  //     )
-  //   }
-  // }
-  
-  render(){
-    console.log('APP', this.props)
+  componentDidUpdate(prevProps) {
+    // debugger
+
+    if (this.props.date === prevProps.date) {
+      return;
+    }
+
+    const formatedDate = format(this.props.date, 'yyyyMMdd');
+    const url = `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&date=${formatedDate}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(
+        (res) => {
+          const rates = new Map([...this.props.rates]);
+          rates.set(formatedDate, res);
+
+          this.props.setIsLoaded(true);//флаг завершения загрузки
+          this.props.saveResult(rates);//созраняем результат
+        },
+        (error) => {
+          this.props.setIsLoaded(true);//флаг завершения загрузки
+          return {
+            isLoaded: true,
+            error
+          }
+        }
+      )
+  }
+
+
+  render() {
+    // debugger;
+    // console.log('Rates: ', this.props.rates);
     return (
       <div className="App">
         <BrowserRouter>
@@ -85,34 +85,38 @@ class App extends React.Component {
           <main className="App-main container">
 
             <DatePicker
-                className="App-date"
-                dateFormat="yyyy/MM/dd"
-                selected={this.props.startDate}
-                onChange={this.props.onChangeDate}
+              className="App-date"
+              dateFormat="yyyy/MM/dd"
+              selected={this.props.date}
+              onChange={this.props.onChangeDate}
             />
-            {/*{this.content()}*/}
 
-            <Route path="/" exact render={()=>{
-              return (
-                <>
-
-                </>
-                )
-            }}/>
-            {/*<Route path="/charts" component={Charts}/>*/}
-
+            <Route
+              exact
+              path={'/'}
+              render={() =>
+                this.props.rates.has(format(this.props.date, 'yyyyMMdd'))
+                ? (<TableRates rates={this.props.rates.get(format(this.props.date, 'yyyyMMdd'))}/>)
+                : null
+              }
+            />
+            <Route
+              path="/charts"
+              component={Charts}
+            />
 
           </main>
         </BrowserRouter>
       </div>
     )
   }
-
 }
 
 function mapStateToProps(state) {
   return {
-    startDate: state.startDate
+    date: state.date,
+    rates: state.rates,
+    isLoaded: state.isLoaded
   }
 }
 
@@ -120,7 +124,9 @@ function mapDispatchToProps(dispatch) {
   return {
     onAdd: () => dispatch(add()),
     onChangeDate: (date) => dispatch(changeDate(date)),
-    // onAsyncAdd: (num) => dispatch(asyncAdd(num))
+    setIsLoaded: (isLoaded) => dispatch(setIsLoaded(isLoaded)),
+    saveResult: (rates) => dispatch(saveResult(rates))
+    // onChangeDate: (date) => dispatch(asyncChangeDate(date)),
   }
 }
 
