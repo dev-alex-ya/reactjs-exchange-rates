@@ -1,10 +1,4 @@
-import {ADD, CHANGE_DATE, SET_LOADING, SAVE_RESULT, CHANGE_SELECTED} from './actionsTypes';
-
-export function add() {
-  return {
-    type: ADD
-  }
-}
+import {CHANGE_DATE, SET_LOADING, SAVE_RESULT, MARK_SELECT_VALUE, UNMARK_SELECT_VALUE} from './actionsTypes';
 
 export function changeDate(date) {
   return {
@@ -27,11 +21,16 @@ export function saveResult(rates) {
   }
 }
 
-export function handleChangeSelected(selectedItems) {
-  // debugger
+export function markSelectValue(value) {
   return {
-    type: CHANGE_SELECTED,
-    payload: selectedItems
+    type: MARK_SELECT_VALUE,
+    payload: value
   }
+}
 
+export function unmarkSelectValue(value) {
+  return {
+    type: UNMARK_SELECT_VALUE,
+    payload: value
+  }
 }

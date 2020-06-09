@@ -1,9 +1,9 @@
 import React from 'react'
-// import classes from './Charts.module.css'
+import classes from './Charts.module.css'
 import { Chart } from 'react-charts'
 import {format} from "date-fns";
 import {connect} from 'react-redux';
-import {saveResult, setIsLoaded, handleChangeSelected} from '../redux/actions/actions';
+import {saveResult, setIsLoaded, markSelectValue, unmarkSelectValue} from '../redux/actions/actions';
 
 const Charts = (props) => {
 
@@ -20,8 +20,24 @@ const Charts = (props) => {
   }
 
   const handleChangeSelect = (event) => {
-    console.log('handleChangeSelect', event.target.value)
+    if(props.selectValues.has(event.target.value)) {
+      props.unmarkSelectValue(event.target.value);
+    } else {
+      props.markSelectValue(event.target.value);
+    }
   }
+
+
+  const formatedDate = format(props.date, 'yyyyMMdd');
+
+  let options;
+  if(props.rates.has(formatedDate)) {
+    const rate = props.rates.get(formatedDate );
+    options = rate.map((item) => {
+      return (<option key={item.cc} value={item.cc}>{item.txt}</option>)
+    });
+  }
+
 
   return (
     <div
@@ -38,14 +54,9 @@ const Charts = (props) => {
         <button onClick={() => {console.log('За год')}}>За год</button>
       </div>
 
-      {/*<select size="10" multiple name="rates[]" onChange={handleChangeSelect} value={props.selectValues}>*/}
-      {/*  <option value="rate1">1 rate</option>*/}
-      {/*  <option value="rate2">2 rate</option>*/}
-      {/*  <option value="rate3">3 rate</option>*/}
-      {/*  <option value="rate4">1 rate</option>*/}
-      {/*  <option value="rate5">2 rate</option>*/}
-      {/*  <option value="rate6">3 rate</option>*/}
-      {/*</select>*/}
+      <select size="10" multiple name="rates[]" onChange={handleChangeSelect} value={[...props.selectValues]}>
+        {options}
+      </select>
 
       <Chart data={props.data} axes={props.axes} />
     </div>
@@ -54,11 +65,12 @@ const Charts = (props) => {
 
 function mapStateToProps(state) {
   return {
-    // selectValues: state.selectValues,
+    selectValues: state.selectValues,
     date: state.date,
     rates: state.rates,
     isLoaded: state.isLoaded,
     selectedRates: state.selectedRates,
+    axes: state.axes,
 
     data: [
       {
@@ -70,10 +82,7 @@ function mapStateToProps(state) {
         data: [['20200514', 19.0396], ['20200515', 18.9067], ['20200516', 18.9067], ['20200517', 18.9067], ['20200518', 18.8855], ['20200519', 18.9387], ['20200520', 19.0399], ['20200521', 19.1441], ['20200522', 19.2478], ['20200523', 19.2478]]
       }
     ],
-    axes: [
-      { primary: true, type: 'linear', position: 'bottom' },
-      { type: 'linear', position: 'left' }
-    ]
+
   }
 }
 
@@ -81,7 +90,8 @@ function mapDispatchToProps(dispatch) {
   return {
     setIsLoaded: (isLoaded) => dispatch(setIsLoaded(isLoaded)),
     saveResult: (rates) => dispatch(saveResult(rates)),
-    handleChangeSelected: (event) => dispatch(handleChangeSelected(event.target.value))
+    markSelectValue: (value) => dispatch(markSelectValue(value)),
+    unmarkSelectValue: (value) => dispatch(unmarkSelectValue(value)),
   }
 }
 
