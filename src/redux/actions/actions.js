@@ -1,4 +1,4 @@
-import {CHANGE_DATE, SET_LOADING, SAVE_RESULT, MARK_SELECT_VALUE, UNMARK_SELECT_VALUE} from './actionsTypes';
+import {CHANGE_DATE, SET_LOADING, SAVE_RESULT, MARK_SELECT_VALUE, UNMARK_SELECT_VALUE, SELECT_PERIOD} from './actionsTypes';
 
 export function changeDate(date) {
   return {
@@ -32,5 +32,12 @@ export function unmarkSelectValue(value) {
   return {
     type: UNMARK_SELECT_VALUE,
     payload: value
+  }
+}
+
+export function selectPeriod(period) {
+  return {
+    type: SELECT_PERIOD,
+    payload: period
   }
 }

@@ -3,7 +3,8 @@ import classes from './Charts.module.css'
 import { Chart } from 'react-charts'
 import {format} from "date-fns";
 import {connect} from 'react-redux';
-import {saveResult, setIsLoaded, markSelectValue, unmarkSelectValue} from '../redux/actions/actions';
+import {saveResult, setIsLoaded, markSelectValue, unmarkSelectValue, selectPeriod} from '../redux/actions/actions';
+import {RadioGroup, RadioButton, ReversedRadioButton} from 'react-radio-buttons';
 
 const Charts = (props) => {
 
@@ -46,31 +47,44 @@ const Charts = (props) => {
         height: '300px'
       }}
     >
+      <Chart data={props.data} axes={props.axes} />
 
-      <div>
-        <button onClick={handler10days}>За 10 дней</button>
-        <button onClick={() => {console.log('За месяц')}}>За месяц</button>
-        <button onClick={() => {console.log('За полгода')}}>За полгода</button>
-        <button onClick={() => {console.log('За год')}}>За год</button>
+      <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 20}}>
+        <RadioGroup onChange={ props.selectPeriod } value={props.selectedPeriod} style={{maxWidth:150}}>
+          <ReversedRadioButton value="10">
+            Декада
+          </ReversedRadioButton>
+          <ReversedRadioButton value="30">
+            месяц
+          </ReversedRadioButton>
+          <ReversedRadioButton value="180">
+            Полгода
+          </ReversedRadioButton>
+          <ReversedRadioButton value="365">
+            Год
+          </ReversedRadioButton>
+        </RadioGroup>
+
+        <select size="10" multiple name="rates[]" onChange={handleChangeSelect} value={[...props.selectValues]}>
+          {options}
+        </select>
       </div>
 
-      <select size="10" multiple name="rates[]" onChange={handleChangeSelect} value={[...props.selectValues]}>
-        {options}
-      </select>
 
-      <Chart data={props.data} axes={props.axes} />
+
     </div>
   )
 }
 
 function mapStateToProps(state) {
   return {
-    selectValues: state.selectValues,
-    date: state.date,
-    rates: state.rates,
+    selectValues: state.selectValues, //выбор валют
+    selectedPeriod: state.selectedPeriod,//выборпериода
+    date: state.date, // дата
+    rates: state.rates, // курсы валют
     isLoaded: state.isLoaded,
-    selectedRates: state.selectedRates,
-    axes: state.axes,
+    selectedRates: state.selectedRates, //выбранные валюты
+    axes: state.axes, // осиграфика
 
     data: [
       {
@@ -81,7 +95,7 @@ function mapStateToProps(state) {
         label: 'CAD',
         data: [['20200514', 19.0396], ['20200515', 18.9067], ['20200516', 18.9067], ['20200517', 18.9067], ['20200518', 18.8855], ['20200519', 18.9387], ['20200520', 19.0399], ['20200521', 19.1441], ['20200522', 19.2478], ['20200523', 19.2478]]
       }
-    ],
+    ], //точки для построенияграфика
 
   }
 }
@@ -92,6 +106,7 @@ function mapDispatchToProps(dispatch) {
     saveResult: (rates) => dispatch(saveResult(rates)),
     markSelectValue: (value) => dispatch(markSelectValue(value)),
     unmarkSelectValue: (value) => dispatch(unmarkSelectValue(value)),
+    selectPeriod: (period) => dispatch(selectPeriod(period)),
   }
 }
 

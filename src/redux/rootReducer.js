@@ -1,10 +1,11 @@
-import {CHANGE_DATE, MARK_SELECT_VALUE, SAVE_RESULT, SET_LOADING, UNMARK_SELECT_VALUE} from './actions/actionsTypes';
+import {CHANGE_DATE, MARK_SELECT_VALUE, SAVE_RESULT, SET_LOADING, UNMARK_SELECT_VALUE, SELECT_PERIOD} from './actions/actionsTypes';
 
 const initialState = {
   isLoaded: false,
   date: new Date(),
   selectedRates: [], //массив объектов {label: 'AUD', data: [  ['20200522', 17.64], ['20200523', 17.64]]}, {...}
   selectValues: new Set([]), //массив названий['AUD', 'USD]
+  selectedPeriod: '30',
   rates: new Map(),
   axes: [
     { primary: true, type: 'linear', position: 'bottom' },
@@ -31,8 +32,10 @@ const rootReducer = (state = initialState, action) => {
     case UNMARK_SELECT_VALUE:
       const selectedValues = new Set([...state.selectValues]);
       selectedValues.delete(action.payload);
-
       return {...state, selectValues: selectedValues};
+
+    case SELECT_PERIOD:
+      return {...state, selectedPeriod: action.payload};
 
     default:
       return state
