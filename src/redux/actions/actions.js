@@ -1,4 +1,13 @@
-import {CHANGE_DATE, SET_LOADING, SAVE_RESULT, MARK_SELECT_VALUE, UNMARK_SELECT_VALUE, SELECT_PERIOD} from './actionsTypes';
+import {
+  CHANGE_DATE,
+  SET_LOADING,
+  SAVE_RESULT,
+  MARK_SELECT_VALUE,
+  UNMARK_SELECT_VALUE,
+  SET_PERIOD,
+  SET_PERIOD_LENGTH,
+  PREPARE_DATA
+} from './actionsTypes';
 
 export function changeDate(date) {
   return {
@@ -21,23 +30,44 @@ export function saveResult(rates) {
   }
 }
 
-export function markSelectValue(value) {
+export function markSelectValue(rateName) {
   return {
     type: MARK_SELECT_VALUE,
-    payload: value
+    payload: rateName
   }
 }
 
-export function unmarkSelectValue(value) {
+export function unmarkSelectValue(rateName) {
   return {
     type: UNMARK_SELECT_VALUE,
-    payload: value
+    payload: rateName
   }
 }
 
-export function selectPeriod(period) {
+export function setPeriod(period) {
   return {
-    type: SELECT_PERIOD,
+    type: SET_PERIOD,
     payload: period
   }
 }
+
+
+export function setPeriodLength(periodLength) {
+  return {
+    type: SET_PERIOD_LENGTH,
+    payload: periodLength
+  }
+}
+
+export function insertRateInData(data) {
+  const preparedData = {
+    label: data,
+    data: [['20200514', 17.3923], ['20200515', 17.1254], ['20200516', 17.1254], ['20200517', 17.1254], ['20200518', 17.1149], ['20200519', 17.2034], ['20200520', 17.3215], ['20200521', 17.4998], ['20200522', 17.64], ['20200523', 17.64]]
+  }
+
+  return {
+    type: PREPARE_DATA,
+    payload: preparedData
+  }
+}
+
