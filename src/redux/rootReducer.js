@@ -13,7 +13,7 @@ const initialState = {
   isLoaded: false,
   date: new Date(),
   selectedRates: [], //массив объектов {label: 'AUD', data: [  ['20200522', 17.64], ['20200523', 17.64]]}, {...}
-  selectedValues: new Set([]), //массив названий['AUD', 'USD]
+  selectedRateNames: new Set([]), //массив названий['AUD', 'USD]
   periodLength: '10',
   selectedPeriod: [],
   rates: new Map(),
@@ -37,12 +37,12 @@ const rootReducer = (state = initialState, action) => {
       return {...state, rates: action.payload};
 
     case MARK_SELECT_VALUE:
-      return {...state, selectedValues: new Set([...state.selectedValues, action.payload])};
+      return {...state, selectedRateNames: new Set([...state.selectedRateNames, action.payload])};
 
     case UNMARK_SELECT_VALUE:
-      const selectedValues = new Set([...state.selectedValues]);
+      const selectedValues = new Set([...state.selectedRateNames]);
       selectedValues.delete(action.payload);
-      return {...state, selectedValues: selectedValues};
+      return {...state, selectedRateNames: selectedValues};
 
     case SET_PERIOD:
       return {...state, selectedPeriod: action.payload};

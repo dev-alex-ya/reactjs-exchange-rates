@@ -31,7 +31,7 @@ const Charts = (props) => {
 
   const handleSelectRate = (event) => {
     // debugger
-    if(props.selectedValues.has(event.target.value)) {
+    if(props.selectedRateNames.has(event.target.value)) {
       // убираем выбранную валюту из массива
       props.unmarkSelectValue(event.target.value);
     } else {
@@ -88,7 +88,7 @@ const Charts = (props) => {
             Год
           </ReversedRadioButton>
         </RadioGroup>
-        <select size="10" multiple name="rates[]" onChange={handleSelectRate} value={[...props.selectedValues]}>
+        <select size="10" multiple name="rates[]" onChange={handleSelectRate} value={[...props.selectedRateNames]}>
           {options}
         </select>
       </div>
@@ -98,7 +98,7 @@ const Charts = (props) => {
 
 function mapStateToProps(state) {
   return {
-    selectedValues: state.selectedValues, //выбор валют
+    selectedRateNames: state.selectedRateNames, //выбор валют
     periodLength: state.periodLength, //длина периода
     selectedPeriod: state.selectedPeriod,//массив строковых дат
     date: state.date, // дата
