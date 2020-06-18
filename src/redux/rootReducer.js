@@ -6,7 +6,7 @@ import {
   UNMARK_SELECT_VALUE,
   SET_PERIOD,
   SET_PERIOD_LENGTH,
-  PREPARE_DATA
+  SET_RATES
 } from './actions/actionsTypes';
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
   selectedRateNames: new Set([]), //массив названий['AUD', 'USD]
   periodLength: '10',
   selectedPeriod: [],
-  rates: new Map(),
+  rates: new Map(), //полученые от API
   axes: [
     { primary: true, type: 'linear', position: 'bottom' },
     { type: 'linear', position: 'left' }
@@ -50,7 +50,7 @@ const rootReducer = (state = initialState, action) => {
     case SET_PERIOD_LENGTH:
       return {...state, periodLength: action.payload};
 
-    case PREPARE_DATA:
+    case SET_RATES:
       return {...state, selectedRates: [...state.selectedRates, action.payload]};
 
     default:

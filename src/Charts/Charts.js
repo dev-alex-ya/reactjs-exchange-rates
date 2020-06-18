@@ -11,7 +11,7 @@ import {
   unmarkSelectValue,
   setPeriod,
   setPeriodLength,
-  insertRateInData
+  setRates
 } from '../redux/actions/actions';
 
 const Charts = (props) => {
@@ -38,7 +38,7 @@ const Charts = (props) => {
       // добавляем выбранную валюту в массив
       props.markSelectValue(event.target.value);
 
-      // props.selectGraph(event.target.value);
+      props.setRates(event.target.value);
     }
   }
 
@@ -98,13 +98,14 @@ const Charts = (props) => {
 
 function mapStateToProps(state) {
   return {
-    selectedRateNames: state.selectedRateNames, //выбор валют
+
     periodLength: state.periodLength, //длина периода
     selectedPeriod: state.selectedPeriod,//массив строковых дат
     date: state.date, // дата
-    rates: state.rates, // курсы валют
+    rates: state.rates, //полученые от API
     isLoaded: state.isLoaded,
-    selectedRates: state.selectedRates, //выбранные валюты
+    selectedRateNames: state.selectedRateNames, //выбор валют
+    selectedRates: state.selectedRates, //массив объектов {label: 'AUD', data: [  ['20200522', 17.64], ['20200523', 17.64]]}, {...}
     axes: state.axes, // осиграфика
     data: [
       {
@@ -127,7 +128,7 @@ function mapDispatchToProps(dispatch) {
     unmarkSelectValue: (value) => dispatch(unmarkSelectValue(value)),
     setPeriod: (period) => dispatch(setPeriod(period)),
     setPeriodLength: (periodLength) => dispatch(setPeriodLength(periodLength)),
-    insertRateInData: (data) => dispatch(insertRateInData(data))
+    setRates: (data) => dispatch(setRates(data))
   }
 }
 
